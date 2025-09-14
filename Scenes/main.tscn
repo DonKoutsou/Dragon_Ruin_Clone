@@ -1,0 +1,60 @@
+[gd_scene load_steps=8 format=3 uid="uid://c4k4pjxrbh0os"]
+
+[ext_resource type="PackedScene" uid="uid://c3v1lq4fsttds" path="res://Scenes/Level.tscn" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://db3mah6gf2gqg" path="res://Scenes/Minimap.tscn" id="2_0xm2m"]
+[ext_resource type="Shader" uid="uid://clmpbspffeit1" path="res://Shaders/Dither.gdshader" id="4_272bh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5vw27"]
+shader = ExtResource("4_272bh")
+shader_parameter/colors = 16.0
+shader_parameter/dither = 2.0
+
+[sub_resource type="Environment" id="Environment_7mycd"]
+adjustment_enabled = true
+
+[sub_resource type="World3D" id="World3D_272bh"]
+environment = SubResource("Environment_7mycd")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h2yge"]
+bg_color = Color(0.17068, 0.17068, 0.17068, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_blend = true
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="Main" type="Node"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_5vw27")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="CanvasLayer/SubViewportContainer"]
+own_world_3d = true
+world_3d = SubResource("World3D_272bh")
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="Level" parent="CanvasLayer/SubViewportContainer/SubViewport" instance=ExtResource("1_ig7tw")]
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/SubViewportContainer/SubViewport"]
+offset_right = 204.0
+offset_bottom = 204.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_h2yge")
+
+[node name="Control" parent="CanvasLayer/SubViewportContainer/SubViewport/PanelContainer" instance=ExtResource("2_0xm2m")]
+layout_mode = 2

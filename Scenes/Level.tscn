@@ -1,0 +1,54 @@
+[gd_scene load_steps=10 format=3 uid="uid://c3v1lq4fsttds"]
+
+[ext_resource type="Script" uid="uid://hxxsah6n6oak" path="res://Scripts/Level.gd" id="1_wkftn"]
+[ext_resource type="PackedScene" uid="uid://bqs6bum6tbmi1" path="res://Scenes/Map.tscn" id="2_q4iis"]
+[ext_resource type="Material" uid="uid://due7p8otyevbu" path="res://Shaders/Wiremat.tres" id="3_mxnmf"]
+[ext_resource type="Script" uid="uid://bs4q4gmw2d7ow" path="res://Scripts/pl.gd" id="4_mxnmf"]
+
+[sub_resource type="Environment" id="Environment_wkftn"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_6nxi1"]
+material = ExtResource("3_mxnmf")
+size = Vector3(2, 2, 2)
+
+[sub_resource type="MultiMesh" id="MultiMesh_m3clv"]
+transform_format = 1
+mesh = SubResource("BoxMesh_6nxi1")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_m3clv"]
+material = ExtResource("3_mxnmf")
+
+[sub_resource type="MultiMesh" id="MultiMesh_mxnmf"]
+transform_format = 1
+mesh = SubResource("PlaneMesh_m3clv")
+
+[node name="Level" type="Node3D" node_paths=PackedStringArray("Pl", "WallMultimesh", "FloorMultiMesh")]
+script = ExtResource("1_wkftn")
+MapScene = ExtResource("2_q4iis")
+Pl = NodePath("Camera3D")
+Mat = ExtResource("3_mxnmf")
+WallMultimesh = NodePath("Walls")
+FloorMultiMesh = NodePath("Floors")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.709073, 2.15896)
+fov = 45.0
+script = ExtResource("4_mxnmf")
+speed = 0.1
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Camera3D"]
+light_energy = 5.0
+light_indirect_energy = 0.0
+light_bake_mode = 0
+spot_range = 6.0
+spot_attenuation = 0.7
+spot_angle_attenuation = 0.112656
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_wkftn")
+
+[node name="Walls" type="MultiMeshInstance3D" parent="."]
+multimesh = SubResource("MultiMesh_m3clv")
+
+[node name="Floors" type="MultiMeshInstance3D" parent="."]
+multimesh = SubResource("MultiMesh_mxnmf")
