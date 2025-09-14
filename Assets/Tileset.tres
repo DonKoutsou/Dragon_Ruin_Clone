@@ -1,9 +1,12 @@
-[gd_resource type="TileSet" load_steps=9 format=3 uid="uid://ffar32u4k25w"]
+[gd_resource type="TileSet" load_steps=15 format=3 uid="uid://ffar32u4k25w"]
 
 [ext_resource type="Texture2D" uid="uid://bxsva3jo8jnaw" path="res://Assets/Floor.png" id="1_68ix7"]
 [ext_resource type="Texture2D" uid="uid://bp5o2flexnwqb" path="res://Assets/Wall.png" id="2_sbnd3"]
 [ext_resource type="Texture2D" uid="uid://4380i3cii8sn" path="res://Assets/Starts.png" id="3_sjwh7"]
 [ext_resource type="Texture2D" uid="uid://cbmhwsc184bnv" path="res://Assets/End.png" id="4_p43xb"]
+[ext_resource type="Texture2D" uid="uid://7n6k6oi3wd0m" path="res://Assets/StraightWall.png" id="5_sjwh7"]
+[ext_resource type="Texture2D" uid="uid://dl47h0i5j6n24" path="res://Assets/CornerWall.png" id="6_p43xb"]
+[ext_resource type="Texture2D" uid="uid://csl3l1er6a7eu" path="res://Assets/Door.png" id="7_p43xb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7jcda"]
 resource_name = "Floor"
@@ -26,8 +29,25 @@ resource_name = "End"
 texture = ExtResource("4_p43xb")
 0:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5bf0d"]
+resource_name = "Wall"
+texture = ExtResource("5_sjwh7")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_aee0m"]
+resource_name = "WallCorner"
+texture = ExtResource("6_p43xb")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3gvnp"]
+texture = ExtResource("7_p43xb")
+0:0/0 = 0
+
 [resource]
 sources/0 = SubResource("TileSetAtlasSource_7jcda")
 sources/1 = SubResource("TileSetAtlasSource_ifvbx")
 sources/2 = SubResource("TileSetAtlasSource_vf1sl")
 sources/3 = SubResource("TileSetAtlasSource_k7aiu")
+sources/4 = SubResource("TileSetAtlasSource_5bf0d")
+sources/5 = SubResource("TileSetAtlasSource_aee0m")
+sources/6 = SubResource("TileSetAtlasSource_3gvnp")

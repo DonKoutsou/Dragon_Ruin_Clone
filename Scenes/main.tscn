@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c4k4pjxrbh0os"]
+[gd_scene load_steps=7 format=3 uid="uid://c4k4pjxrbh0os"]
 
 [ext_resource type="PackedScene" uid="uid://c3v1lq4fsttds" path="res://Scenes/Level.tscn" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://db3mah6gf2gqg" path="res://Scenes/Minimap.tscn" id="2_0xm2m"]
@@ -14,18 +14,6 @@ adjustment_enabled = true
 
 [sub_resource type="World3D" id="World3D_272bh"]
 environment = SubResource("Environment_7mycd")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h2yge"]
-bg_color = Color(0.17068, 0.17068, 0.17068, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_blend = true
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
 
 [node name="Main" type="Node"]
 
@@ -51,10 +39,6 @@ render_target_update_mode = 4
 
 [node name="Level" parent="CanvasLayer/SubViewportContainer/SubViewport" instance=ExtResource("1_ig7tw")]
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/SubViewportContainer/SubViewport"]
-offset_right = 204.0
-offset_bottom = 204.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_h2yge")
-
-[node name="Control" parent="CanvasLayer/SubViewportContainer/SubViewport/PanelContainer" instance=ExtResource("2_0xm2m")]
-layout_mode = 2
+[node name="Control" parent="CanvasLayer/SubViewportContainer/SubViewport" instance=ExtResource("2_0xm2m")]
+offset_left = 4.0
+offset_top = 4.0

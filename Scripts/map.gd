@@ -8,11 +8,15 @@ var Visited : Array[Vector2]
 
 static var maze : Array[Array]
 
+static var Instance : Map
+
 func _ready() -> void:
+	Instance = self
 	generate_maze()
 
 static func CanMoveToPos(Pos : Vector3) -> bool:
-	return maze[roundi(Pos.z)][roundi(Pos.x)] != 1
+	var t = maze[roundi(Pos.z)][roundi(Pos.x)]
+	return t != 4 and t !=5
 
 func generate_maze() -> void:
 	var size = get_tilemap_layer_bounds()
@@ -25,8 +29,30 @@ func generate_maze() -> void:
 			row.append(cell)
 		maze.append(row)
 
+func Testtile(pos : Vector2i) -> int:
+	var tile_alternate : int = 0
+	var rot = test(pos)
+	match rot:
+		-90.0:
+			tile_alternate = TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_H
+		180.0:
+			tile_alternate = TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V
+		90.0:
+			tile_alternate = TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_V
+	return tile_alternate
 
-
+func test(pos : Vector2i) -> float:
+	var rot : float = 0
+	if TileM.is_cell_flipped_h(pos) == false and TileM.is_cell_flipped_v(pos) == false:
+		rot = 0
+	elif TileM.is_cell_flipped_h(pos) == true and TileM.is_cell_flipped_v(pos) == false:
+		rot = -90
+	elif TileM.is_cell_flipped_h(pos) == false and TileM.is_cell_flipped_v(pos) == true:
+		rot = 90
+	elif TileM.is_cell_flipped_h(pos) == true and TileM.is_cell_flipped_v(pos) == true:
+		rot = 180
+	return rot
+	
 # Returns the rectangle (Rect2i) bounding all tiles on the given layer
 func get_tilemap_layer_bounds() -> Rect2i:
 	var cells := TileM.get_used_cells()

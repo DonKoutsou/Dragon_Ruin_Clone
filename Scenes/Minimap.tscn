@@ -1,19 +1,44 @@
-[gd_scene load_steps=4 format=3 uid="uid://db3mah6gf2gqg"]
+[gd_scene load_steps=5 format=3 uid="uid://db3mah6gf2gqg"]
 
 [ext_resource type="Script" uid="uid://gv88tnay1gen" path="res://Scripts/minimap.gd" id="1_jahtd"]
 [ext_resource type="TileSet" uid="uid://ffar32u4k25w" path="res://Assets/Tileset.tres" id="1_ttd1e"]
-[ext_resource type="Texture2D" uid="uid://cbmhwsc184bnv" path="res://Assets/End.png" id="3_cn7vw"]
+[ext_resource type="Texture2D" uid="uid://duriib55mixu7" path="res://Assets/Arrow.png" id="3_e31il"]
 
-[node name="Control" type="SubViewportContainer" node_paths=PackedStringArray("TileM")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h2yge"]
+bg_color = Color(0.17068, 0.17068, 0.17068, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_blend = true
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="Control" type="PanelContainer" node_paths=PackedStringArray("TileM", "LocationLabel", "PlayerSprite")]
 clip_contents = true
-offset_right = 200.0
+offset_right = 276.0
 offset_bottom = 200.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_h2yge")
 script = ExtResource("1_jahtd")
-TileM = NodePath("SubViewport/TileMapLayer")
+TileM = NodePath("HBoxContainer/SubViewportContainer/SubViewport/TileMapLayer")
+LocationLabel = NodePath("HBoxContainer/VBoxContainer/Label")
+PlayerSprite = NodePath("HBoxContainer/SubViewportContainer/SubViewport/Camera2D/Sprite2D")
 
-[node name="SubViewport" type="SubViewport" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="HBoxContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="HBoxContainer/SubViewportContainer"]
 disable_3d = true
 transparent_bg = true
 handle_input_locally = false
@@ -22,13 +47,34 @@ size = Vector2i(200, 200)
 size_2d_override_stretch = true
 render_target_update_mode = 4
 
-[node name="TileMapLayer" type="TileMapLayer" parent="SubViewport"]
+[node name="TileMapLayer" type="TileMapLayer" parent="HBoxContainer/SubViewportContainer/SubViewport"]
 tile_set = ExtResource("1_ttd1e")
 occlusion_enabled = false
 collision_enabled = false
 navigation_enabled = false
 
-[node name="Camera2D" type="Camera2D" parent="SubViewport"]
+[node name="Camera2D" type="Camera2D" parent="HBoxContainer/SubViewportContainer/SubViewport"]
 
-[node name="Sprite2D" type="Sprite2D" parent="SubViewport/Camera2D"]
-texture = ExtResource("3_cn7vw")
+[node name="Sprite2D" type="Sprite2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Camera2D"]
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("3_e31il")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "SOUTH
+5,4"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "GOLD
+4"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -6,6 +6,7 @@ class_name Player
 static var PlayerPos : Vector3
 
 @export var speed = 4.0
+@export var Cast : RayCast3D
 
 var LookDir : Vector3
 
@@ -17,8 +18,9 @@ func Teleport(Pos : Vector3) -> void:
 	position = PlayerPos
 
 func _physics_process(delta):
-	HandleWalk()
+	
 	HandleRotation()
+	HandleWalk()
 	
 
 func HandleRotation() -> void:
@@ -41,7 +43,13 @@ func HandleRotation() -> void:
 	RotTween = create_tween()
 	RotTween.tween_property(self, "rotation", LookDir, 0.3)
 	
+	Minimap.instance.OnPositionVisited(PlayerPos, LookDir.y)
+
+
 func HandleWalk() -> void:
+	if (is_instance_valid(MoveTween) and MoveTween.is_running()):
+		return
+		
 	var dir = Vector3.ZERO
 	if Input.is_action_just_pressed("move_forward"):
 		dir.z -= 1
@@ -55,16 +63,17 @@ func HandleWalk() -> void:
 	if (dir == Vector3.ZERO):
 		return
 	
+	Cast.target_position = dir * 2
+	
 	dir = dir.normalized().rotated(Vector3(0,1,0), LookDir.y)
 	
-	if (!Map.CanMoveToPos(((PlayerPos + (dir * 2))/2))):
+	
+	Cast.force_raycast_update()
+	if (Cast.is_colliding()):
 		return
 	PlayerPos += (dir * 2)
-	
-	if (is_instance_valid(MoveTween)):
-		MoveTween.kill()
 	
 	MoveTween = create_tween()
 	MoveTween.tween_property(self, "position", PlayerPos, 0.3)
 	
-	Minimap.instance.OnPositionVisited(PlayerPos)
+	Minimap.instance.OnPositionVisited(PlayerPos, LookDir.y)
