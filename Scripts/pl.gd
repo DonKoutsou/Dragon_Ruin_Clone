@@ -1,5 +1,5 @@
 # Player.gd (character body with camera as child)
-extends Camera3D
+extends Node3D
 
 class_name Player
 
@@ -13,25 +13,25 @@ var LookDir : Vector3
 var MoveTween : Tween
 var RotTween : Tween
 
+signal PositionChanged(Pos : Vector3, Rot : float)
+
 func Teleport(Pos : Vector3) -> void:
 	PlayerPos = Pos
 	position = PlayerPos
 
-func _physics_process(delta):
-	
-	HandleRotation()
-	HandleWalk()
+func _input(event: InputEvent) -> void:
+	HandleRotation(event)
+	HandleWalk(event)
 	
 
-func HandleRotation() -> void:
+func HandleRotation(event: InputEvent) -> void:
 	var Rot : Vector3 = Vector3.ZERO
 	
-	if (Input.is_action_just_pressed("look_left")):
+	if (event.is_action_pressed("look_left")):
 		Rot.y += PI / 2
-
-	if (Input.is_action_just_pressed("look_right")):
+	if (event.is_action_pressed("look_right")):
 		Rot.y -= PI / 2
-	if (Input.is_action_just_pressed("look_back")):
+	if (event.is_action_pressed("look_back")):
 		Rot.y -= PI
 		
 	if (Rot == Vector3.ZERO):
@@ -43,21 +43,20 @@ func HandleRotation() -> void:
 	RotTween = create_tween()
 	RotTween.tween_property(self, "rotation", LookDir, 0.3)
 	
-	Minimap.instance.OnPositionVisited(PlayerPos, LookDir.y)
+	PositionChanged.emit(PlayerPos, LookDir.y)
 
-
-func HandleWalk() -> void:
+func HandleWalk(event: InputEvent) -> void:
 	if (is_instance_valid(MoveTween) and MoveTween.is_running()):
 		return
 		
 	var dir = Vector3.ZERO
-	if Input.is_action_just_pressed("move_forward"):
+	if event.is_action_pressed("move_forward"):
 		dir.z -= 1
-	if Input.is_action_just_pressed("move_back"):
+	if event.is_action_pressed("move_back"):
 		dir.z += 1
-	if Input.is_action_just_pressed("move_left"):
+	if event.is_action_pressed("move_left"):
 		dir.x -= 1
-	if Input.is_action_just_pressed("move_right"):
+	if event.is_action_pressed("move_right"):
 		dir.x += 1
  	
 	if (dir == Vector3.ZERO):
@@ -76,4 +75,4 @@ func HandleWalk() -> void:
 	MoveTween = create_tween()
 	MoveTween.tween_property(self, "position", PlayerPos, 0.3)
 	
-	Minimap.instance.OnPositionVisited(PlayerPos, LookDir.y)
+	PositionChanged.emit(PlayerPos, LookDir.y)

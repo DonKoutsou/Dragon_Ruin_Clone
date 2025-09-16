@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://tfddmy3svx15"]
+
+[ext_resource type="Script" uid="uid://bs4q4gmw2d7ow" path="res://Scripts/pl.gd" id="1_v0iea"]
+
+[node name="Player" type="Node3D" node_paths=PackedStringArray("Cast")]
+script = ExtResource("1_v0iea")
+Cast = NodePath("RayCast3D")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+light_energy = 10.0
+light_indirect_energy = 0.0
+light_bake_mode = 0
+spot_range = 8.0
+spot_attenuation = 1.97
+spot_angle = 55.0
+spot_angle_attenuation = 0.420446
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -5)

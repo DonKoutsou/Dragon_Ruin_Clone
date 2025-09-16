@@ -6,17 +6,14 @@ class_name Map
 
 var Visited : Array[Vector2]
 
-static var maze : Array[Array]
+var maze : Array[Array]
+var MonsterHouses : Array[Array]
 
 static var Instance : Map
 
 func _ready() -> void:
 	Instance = self
 	generate_maze()
-
-static func CanMoveToPos(Pos : Vector3) -> bool:
-	var t = maze[roundi(Pos.z)][roundi(Pos.x)]
-	return t != 4 and t !=5
 
 func generate_maze() -> void:
 	var size = get_tilemap_layer_bounds()
@@ -28,6 +25,46 @@ func generate_maze() -> void:
 			# Let's say 1 = wall, 0 = open
 			row.append(cell)
 		maze.append(row)
+	
+	var rooms = separate_into_rooms(TileM.get_used_cells_by_id(0))
+	var thing = 0
+	
+func separate_into_rooms(tile_coords: Array) -> Array:
+	var rooms := []
+	var visited := {}
+
+	for coord in tile_coords:
+		if coord in visited:
+			continue
+		var room := []
+		flood_fill(coord, tile_coords, visited, room)
+		rooms.append(room)
+
+	return rooms
+
+func flood_fill(start: Vector2i, tile_coords: Array, visited: Dictionary, room: Array):
+	var stack := [start]
+
+	while stack.size() > 0:
+		var current = stack.pop_back()
+
+		if current in visited:
+			continue
+
+		visited[current] = true
+		room.append(current)
+
+		# Get neighboring tiles (4-directional)
+		var neighbors := [
+			current + Vector2i.LEFT,
+			current + Vector2i.RIGHT,
+			current + Vector2i.UP,
+			current + Vector2i.DOWN
+		]
+
+		for neighbor in neighbors:
+			if neighbor in tile_coords and neighbor not in visited:
+				stack.push_back(neighbor)
 
 func Testtile(pos : Vector2i) -> int:
 	var tile_alternate : int = 0

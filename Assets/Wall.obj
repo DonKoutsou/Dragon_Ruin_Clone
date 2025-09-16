@@ -15,6 +15,6 @@ vn 1.000000 0.000000 0.000000
 vn 1.000000 0.000000 0.000000
 vn 1.000000 0.000000 0.000000
 s off
-g Wall
-usemtl initialShadingGroup
+g Wall:Wall
+usemtl Wall:initialShadingGroup
 f 1/1/1 4/2/2 3/3/3 2/4/4

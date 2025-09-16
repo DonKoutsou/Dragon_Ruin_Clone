@@ -3,7 +3,6 @@ extends Node3D
 class_name Level
 
 @export var MapScene : PackedScene
-@export var Pl : Player
 @export var Mat : ShaderMaterial
 @export var WallMultimesh : MultiMeshInstance3D
 @export var FloorMultiMesh : MultiMeshInstance3D
@@ -19,14 +18,11 @@ var Meshcount : int = 0
 
 var Maze : Array[Array]
 
-func _ready():
-	var TileMS = MapScene.instantiate() as Map
-	add_child(TileMS)
-	build_maze_3d(Map.maze)
+func SpawnPlayer(Pl : Player) -> void:
+	add_child(Pl)
 	Pl.Teleport(Vector3(SpawnPoint.x, 1, SpawnPoint.z))
-	TileMS.visible = false
 
-func build_maze_3d(maze:Array[Array]):
+func BuildMaze(maze : Array[Array]):
 	Maze = maze
 	
 	var BoxMeshes : Array[Vector3]
@@ -126,10 +122,10 @@ func _build_maze(maze):
 			var cell_pos = Vector3(x * cell_size, 0, y * cell_size)
 			
 			# Make floor
-			var floor = MeshInstance3D.new()
-			floor.mesh = PlaneMesh.new()
-			floor.position = cell_pos
-			add_child(floor)
+			var fl = MeshInstance3D.new()
+			fl.mesh = PlaneMesh.new()
+			fl.position = cell_pos
+			add_child(fl)
 			
 			# Walls
 			for dir in range(4):

@@ -5,21 +5,21 @@ class_name Minimap
 @export var TileM : TileMapLayer
 @export var LocationLabel : Label
 @export var PlayerSprite : Sprite2D
+@export var Camera : Camera2D
 
+var InitialSize : Vector2
+var MapBig : bool = false
 
-static var instance : Minimap
+var maze : Array[Array]
 
 func _ready() -> void:
-	instance = self
+	InitialSize = size
 
 func OnPositionVisited(Pos : Vector3, Direction : float) -> void:
 	var pos = Vector2(roundi((Pos.x * 8) / 16), roundi((Pos.z * 8) / 16))
 	var final = Vector2(pos.x * 16, pos.y * 16) + Vector2(8,8)
-	
-	
-	
-	var maze = Map.maze
-	$HBoxContainer/SubViewportContainer/SubViewport/Camera2D.position = final
+
+	Camera.position = final
 	PlayerSprite.rotation = -Direction
 	var row = -16
 	for g in 3:
@@ -41,3 +41,18 @@ static func AngleToDirection(angle: float) -> String:
 	var directions = ["North","Northeast", "West", "Northwest",  "South", "Southwest","East", "Southeast"]
 	var index = int(fmod((angle + PI/8 + TAU), TAU) / (PI / 4)) % 8
 	return directions[index]
+
+func _input(event: InputEvent) -> void:
+	if (event.is_action_pressed("Map")):
+		if (MapBig):
+			#set_anchors_preset(Control.PRESET_FULL_RECT)
+			size = get_viewport_rect().size
+			MapBig = false
+			$HBoxContainer/VBoxContainer.visible = false
+			Camera.zoom = Vector2(0.5,0.5)
+		else:
+			set_anchors_preset(Control.PRESET_TOP_LEFT)
+			size = InitialSize
+			MapBig = true
+			$HBoxContainer/VBoxContainer.visible = true
+			Camera.zoom = Vector2(1,1)
