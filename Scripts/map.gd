@@ -3,10 +3,12 @@ extends Node2D
 class_name Map
 
 @export var TileM : TileMapLayer
+@export var TileM2 : TileMapLayer
 
 var Visited : Array[Vector2]
 
 var maze : Array[Array]
+var SpawnPoint : Vector2
 var MonsterHouses : Array[Array]
 
 static var Instance : Map
@@ -16,17 +18,25 @@ func _ready() -> void:
 	generate_maze()
 
 func generate_maze() -> void:
-	var size = get_tilemap_layer_bounds()
-	for y in range(size.size.y):
+	var rect = TileM.get_used_rect()
+	var size = rect.size + rect.position
+	for y in range(size.y):
 		var row : Array[int] = []
 		
-		for x in range(size.size.x):
+		for x in range(size.x):
 			var cell = TileM.get_cell_source_id(Vector2i(x, y))
 			# Let's say 1 = wall, 0 = open
+			if (TileM2.get_cell_source_id(Vector2i(x, y)) == 2):
+				SpawnPoint = Vector2(x, y)
 			row.append(cell)
+			
 		maze.append(row)
-	
-	var rooms = separate_into_rooms(TileM.get_used_cells_by_id(0))
+		
+	var AllTiles = TileM.get_used_cells()
+	#var Doors = TileM.get_used_cells_by_id(6)
+	#for g in Doors:
+		#AllTiles.erase(g)
+	var rooms = separate_into_rooms(AllTiles)
 	var thing = 0
 	
 func separate_into_rooms(tile_coords: Array) -> Array:
@@ -55,17 +65,59 @@ func flood_fill(start: Vector2i, tile_coords: Array, visited: Dictionary, room: 
 		room.append(current)
 
 		# Get neighboring tiles (4-directional)
-		var neighbors := [
-			current + Vector2i.LEFT,
-			current + Vector2i.RIGHT,
-			current + Vector2i.UP,
-			current + Vector2i.DOWN
+		var neighbors : Array[Vector2i] = [
+			Vector2i.LEFT,
+			Vector2i.RIGHT,
+			Vector2i.UP,
+			Vector2i.DOWN
 		]
 
 		for neighbor in neighbors:
-			if neighbor in tile_coords and neighbor not in visited:
-				stack.push_back(neighbor)
+			if current + neighbor in tile_coords and neighbor + current not in visited and !CantReach(current, neighbor) and !CantReach(current + neighbor, neighbor * -1):
+				stack.push_back(neighbor + current)
+			else:
+				var f
 
+func CantReach(tilecoords : Vector2, dir : Vector2) -> bool:
+	var index = TileM.get_cell_source_id(tilecoords)
+	var tilerotation = testrad(tilecoords)
+	var resault : bool
+	if (index == 0):
+		resault = false
+	else : if (index == 1):
+		resault = false
+	else : if (index == 2):
+		resault = false
+	else : if (index == 3):
+		resault = false
+	else : if (index == 4):
+		var rotatedv = Vector2.LEFT.rotated(tilerotation)
+		resault = dir.is_equal_approx(rotatedv)
+	else : if (index == 5):
+		var rot1 = Vector2.LEFT.rotated(tilerotation)
+		var rot2 = Vector2.DOWN.rotated(tilerotation)
+		resault = dir.is_equal_approx(rot1) or dir.is_equal_approx(rot2)
+	else : if (index == 6):
+		var rot1 = Vector2.LEFT.rotated(tilerotation)
+		resault = dir.is_equal_approx(rot1)
+	else : if (index == 7):
+		var rot1 = Vector2.DOWN.rotated(tilerotation)
+		resault = !dir.is_equal_approx(rot1)
+	else : if (index == 8):
+		var rot1 = Vector2.LEFT.rotated(tilerotation)
+		var rot2 = Vector2.RIGHT.rotated(tilerotation)
+		resault = dir.is_equal_approx(rot2) or dir.is_equal_approx(rot1)
+	else : if (index == 9):
+		resault = false
+	else : if (index == 10):
+		var rot1 = Vector2.UP.rotated(tilerotation)
+		resault = dir.is_equal_approx(rot1)
+	else : if (index == 11):
+		var rot1 = Vector2.LEFT.rotated(tilerotation)
+		var rot2 = Vector2.UP.rotated(tilerotation)
+		resault = dir.is_equal_approx(rot1) or dir.is_equal_approx(rot2)
+	return resault
+	
 func Testtile(pos : Vector2i) -> int:
 	var tile_alternate : int = 0
 	var rot = test(pos)
@@ -88,6 +140,18 @@ func test(pos : Vector2i) -> float:
 		rot = 90
 	elif TileM.is_cell_flipped_h(pos) == true and TileM.is_cell_flipped_v(pos) == true:
 		rot = 180
+	return rot
+
+func testrad(pos : Vector2i) -> float:
+	var rot : float = 0
+	if TileM.is_cell_flipped_h(pos) == false and TileM.is_cell_flipped_v(pos) == false:
+		rot = 0
+	elif TileM.is_cell_flipped_h(pos) == true and TileM.is_cell_flipped_v(pos) == false:
+		rot = PI/2
+	elif TileM.is_cell_flipped_h(pos) == false and TileM.is_cell_flipped_v(pos) == true:
+		rot = -PI/2
+	elif TileM.is_cell_flipped_h(pos) == true and TileM.is_cell_flipped_v(pos) == true:
+		rot = PI
 	return rot
 	
 # Returns the rectangle (Rect2i) bounding all tiles on the given layer

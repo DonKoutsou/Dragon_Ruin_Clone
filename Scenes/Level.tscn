@@ -48,10 +48,9 @@ mesh = ExtResource("6_tj5wv")
 transform_format = 1
 mesh = ExtResource("7_ienac")
 
-[node name="Level" type="Node3D" node_paths=PackedStringArray("Pl", "WallMultimesh", "FloorMultiMesh", "FlatWallMultimesh", "WallCollission", "CornerWallMultimesh", "DoorWallMultimesh")]
+[node name="Level" type="Node3D" node_paths=PackedStringArray("WallMultimesh", "FloorMultiMesh", "FlatWallMultimesh", "WallCollission", "CornerWallMultimesh", "DoorWallMultimesh")]
 script = ExtResource("1_wkftn")
 MapScene = ExtResource("2_q4iis")
-Pl = NodePath("")
 Mat = ExtResource("3_mxnmf")
 WallMultimesh = NodePath("Walls")
 FloorMultiMesh = NodePath("Floors")

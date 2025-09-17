@@ -21,18 +21,22 @@ func OnPositionVisited(Pos : Vector3, Direction : float) -> void:
 
 	Camera.position = final
 	PlayerSprite.rotation = -Direction
-	var row = -16
-	for g in 3:
-		var collumn = -16
-		for z in 3:
-			var mappos = TileM.local_to_map(Vector2(final.x + row, final.y + collumn))
-			var t = maze[mappos.y][mappos.x]
-			TileM.set_cell(mappos, t, Vector2i.ZERO, Map.Instance.Testtile(mappos))
-			print("Cell {0}x {1}y set to {2}".format([mappos.y, mappos.x, t]))
-			collumn += 16
+	#var row = -16
+	#for g in 3:
+		#var collumn = -16
+		#for z in 3:
+	var mappos = TileM.local_to_map(Vector2(final.x, final.y ))
+	#collumn += 16
+	
+	if (maze.size() - 1 < mappos.y or maze[mappos.y].size() - 1 < mappos.x):
+		return
+	var t = maze[mappos.y][mappos.x]
+	TileM.set_cell(mappos, t, Vector2i.ZERO, Map.Instance.Testtile(mappos))
+	#print("Cell {0}x {1}y set to {2}".format([mappos.y, mappos.x, t]))
+			
 		
-		row += 16
-		collumn = -16
+		#row += 16
+		#collumn = -16
 		
 	var p = TileM.local_to_map(Vector2(final.x, final.y))
 	LocationLabel.text = "{0}\n{1}".format([AngleToDirection(Direction),p])

@@ -22,7 +22,7 @@ func _ready() -> void:
 		newSheet.SetCharacter(g)
 		CharacterSheetPlecement.add_child(newSheet)
 	
-	Lvl.BuildMaze(TileMS.maze)
+	Lvl.BuildMaze(TileMS.maze, TileMS.SpawnPoint)
 	
 	var Pl = PlayerControllerScene.instantiate() as Player
 	

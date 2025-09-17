@@ -1,21 +1,36 @@
-[gd_resource type="TileSet" load_steps=14 format=3 uid="uid://ffar32u4k25w"]
+[gd_resource type="TileSet" load_steps=24 format=3 uid="uid://ffar32u4k25w"]
 
 [ext_resource type="Texture2D" uid="uid://bp5o2flexnwqb" path="res://Assets/Wall.png" id="2_sbnd3"]
+[ext_resource type="Texture2D" uid="uid://ceffa0xpaacry" path="res://Assets/MapPieces/Tsection.png" id="2_vf1sl"]
+[ext_resource type="Texture2D" uid="uid://dq1jcca7e5ron" path="res://Assets/MapPieces/TurnRight.png" id="3_k7aiu"]
 [ext_resource type="Texture2D" uid="uid://4380i3cii8sn" path="res://Assets/Starts.png" id="3_sjwh7"]
 [ext_resource type="Texture2D" uid="uid://cbmhwsc184bnv" path="res://Assets/End.png" id="4_p43xb"]
 [ext_resource type="Texture2D" uid="uid://7n6k6oi3wd0m" path="res://Assets/StraightWall.png" id="5_sjwh7"]
 [ext_resource type="Texture2D" uid="uid://dl47h0i5j6n24" path="res://Assets/CornerWall.png" id="6_p43xb"]
+[ext_resource type="Texture2D" uid="uid://bugvwrl6x6iek" path="res://Assets/MapPieces/Cap.png" id="7_7jcda"]
 [ext_resource type="Texture2D" uid="uid://csl3l1er6a7eu" path="res://Assets/Door.png" id="7_p43xb"]
+[ext_resource type="Texture2D" uid="uid://cwegg5mts487h" path="res://Assets/MapPieces/Corridor.png" id="8_7jcda"]
+[ext_resource type="Texture2D" uid="uid://s8iiap03j" path="res://Assets/MapPieces/Intersection.png" id="9_ifvbx"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7jcda"]
 resource_name = "Floor"
-texture = ExtResource("4_p43xb")
+texture = ExtResource("2_sbnd3")
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ifvbx"]
 resource_name = "Wall"
 texture = ExtResource("2_sbnd3")
 use_texture_padding = false
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_c0rgn"]
+resource_name = "T"
+texture = ExtResource("2_vf1sl")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jxyt5"]
+resource_name = "Turn"
+texture = ExtResource("3_k7aiu")
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vf1sl"]
@@ -42,11 +57,31 @@ texture = ExtResource("6_p43xb")
 texture = ExtResource("7_p43xb")
 0:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_c0ut2"]
+resource_name = "Cap"
+texture = ExtResource("7_7jcda")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3dg3h"]
+resource_name = "Corridor"
+texture = ExtResource("8_7jcda")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xynfk"]
+resource_name = "Inter"
+texture = ExtResource("9_ifvbx")
+0:0/0 = 0
+
 [resource]
-sources/0 = SubResource("TileSetAtlasSource_7jcda")
-sources/1 = SubResource("TileSetAtlasSource_ifvbx")
 sources/2 = SubResource("TileSetAtlasSource_vf1sl")
 sources/3 = SubResource("TileSetAtlasSource_k7aiu")
-sources/4 = SubResource("TileSetAtlasSource_5bf0d")
 sources/5 = SubResource("TileSetAtlasSource_aee0m")
 sources/6 = SubResource("TileSetAtlasSource_3gvnp")
+sources/7 = SubResource("TileSetAtlasSource_c0ut2")
+sources/8 = SubResource("TileSetAtlasSource_3dg3h")
+sources/9 = SubResource("TileSetAtlasSource_xynfk")
+sources/10 = SubResource("TileSetAtlasSource_c0rgn")
+sources/11 = SubResource("TileSetAtlasSource_jxyt5")
+sources/0 = SubResource("TileSetAtlasSource_7jcda")
+sources/4 = SubResource("TileSetAtlasSource_5bf0d")
+sources/1 = SubResource("TileSetAtlasSource_ifvbx")
