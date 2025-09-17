@@ -20,13 +20,13 @@ var Maze : Array[Array]
 
 func SpawnPlayer(Pl : Player) -> void:
 	add_child(Pl)
-	Pl.Teleport(SpawnPoint)
+	Pl.call_deferred("Teleport", SpawnPoint)
 
 func BuildMaze(maze : Array[Array], SpawnP : Vector2):
 	Maze = maze
+	#Multiply by to to convert to 3D coordinates
 	SpawnPoint = Vector3(SpawnP.x * 2, 1, SpawnP.y * 2)
-	
-	var BoxMeshes : Array[Transform3D]
+
 	var FloorMeshes : Array[Transform3D]
 	var WallMeshes : Array[Transform3D]
 	var CornerWallMeshes : Array[Transform3D]
@@ -37,90 +37,60 @@ func BuildMaze(maze : Array[Array], SpawnP : Vector2):
 			var pos = Vector3(x * 2, 0, y * 2)
 			var rot = Map.Instance.test(Vector2i(pos.x, pos.z) / 2)
 			#Floor
-			if (maze[y][x] == 0):
-				FloorMeshes.append(Transform3D(Basis(), pos))
-				#Ceiling
-				
-				FloorMeshes.append(Transform3D(Basis(), pos + Vector3(0,2,0)))
+			FloorMeshes.append(Transform3D(Basis(), pos))
+			#Ceiling
+			FloorMeshes.append(Transform3D(Basis(), pos + Vector3(0,2,0)))
+
 			#Wall
-			else : if maze[y][x] == 1:
-				
-				BoxMeshes.append(Transform3D(Basis(), pos + Vector3(0,1,0)))
-			#Entrance
+			if (maze[y][x] == 1):
+				WallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot)), pos + Vector3(0,1,0)))
+			#Corner
 			else : if (maze[y][x] == 2):
-				#FloorMeshes.append(Transform3D(Basis(), pos))
-				#FloorMeshes.append(Transform3D(Basis(), pos + Vector3(0,2,0)))
-				pass
-			#Exit
-			else : if (maze[y][x] == 3):
-				FloorMeshes.append(Transform3D(Basis(), pos))
-				FloorMeshes.append(Transform3D(Basis(), pos + Vector3(0,2,0)))
-			else : if (maze[y][x] == 4):
-				FloorMeshes.append(Transform3D(Basis(), pos))
-				WallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot)), pos + Vector3(0,1,0)))
-				FloorMeshes.append(Transform3D(Basis(), pos + Vector3(0,2,0)))
-			else : if (maze[y][x] == 5):
-				FloorMeshes.append(Transform3D(Basis(), pos))
-				FloorMeshes.append(Transform3D(Basis(), pos + Vector3(0,2,0)))
 				CornerWallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot)), pos + Vector3(0,1,0)))
-			else : if (maze[y][x] == 6):
-				FloorMeshes.append(Transform3D(Basis(), pos))
-				FloorMeshes.append(Transform3D(Basis(), pos + Vector3(0,2,0)))
+			#Door
+			else : if (maze[y][x] == 3):
 				DoorWallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(Map.Instance.test(Vector2i(pos.x, pos.z) / 2))), pos + Vector3(0,1,0)))
+			#Cap
+			else : if (maze[y][x] == 4):
+				WallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot)), pos + Vector3(0,1,0)))
+				WallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot + 180)), pos + Vector3(0,1,0)))
+				WallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot - 90)), pos + Vector3(0,1,0)))
+			#Corridor
+			else : if (maze[y][x] == 5):
+				WallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot)), pos + Vector3(0,1,0)))
+				WallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot + 180)), pos + Vector3(0,1,0)))
+			#T section
 			else : if (maze[y][x] == 7):
-				FloorMeshes.append(Transform3D(Basis(), pos))
-				FloorMeshes.append(Transform3D(Basis(), pos + Vector3(0,2,0)))
-				WallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot)), pos + Vector3(0,1,0)))
-				WallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot + 180)), pos + Vector3(0,1,0)))
 				WallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot - 90)), pos + Vector3(0,1,0)))
+			#Corner
 			else : if (maze[y][x] == 8):
-				FloorMeshes.append(Transform3D(Basis(), pos))
-				FloorMeshes.append(Transform3D(Basis(), pos + Vector3(0,2,0)))
-				WallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot)), pos + Vector3(0,1,0)))
-				WallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot + 180)), pos + Vector3(0,1,0)))
-			else : if (maze[y][x] == 9):
-				FloorMeshes.append(Transform3D(Basis(), pos))
-				FloorMeshes.append(Transform3D(Basis(), pos + Vector3(0,2,0)))
-			else : if (maze[y][x] == 10):
-				FloorMeshes.append(Transform3D(Basis(), pos))
-				FloorMeshes.append(Transform3D(Basis(), pos + Vector3(0,2,0)))
-				WallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot - 90)), pos + Vector3(0,1,0)))
-			else : if (maze[y][x] == 11):
-				FloorMeshes.append(Transform3D(Basis(), pos))
-				FloorMeshes.append(Transform3D(Basis(), pos + Vector3(0,2,0)))
 				CornerWallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot - 90)), pos + Vector3(0,1,0)))
 				
-	
+	#Floors
 	FloorMultiMesh.multimesh.instance_count = FloorMeshes.size()
 	for g in FloorMeshes.size():
 		FloorMultiMesh.multimesh.set_instance_transform(g, FloorMeshes[g])
 	
-	WallMultimesh.multimesh.instance_count = BoxMeshes.size()
-	for g in BoxMeshes.size():
-		WallMultimesh.multimesh.set_instance_transform(g, BoxMeshes[g])
-	
+	#Walls
 	FlatWallMultimesh.multimesh.instance_count = WallMeshes.size()
 	var WallShape = FlatWallMultimesh.multimesh.mesh.create_trimesh_shape()
 	WallShape.backface_collision = true
 	for g in WallMeshes.size():
 		var pos = WallMeshes[g]
-		#var rot = Map.Instance.test(Vector2i(pos.origin.x, pos.origin.z) / 2)
 		
 		var collision = CollisionShape3D.new()
 		collision.shape = WallShape
-		
 		WallCollission.add_child(collision)
-		
 		collision.transform = pos
 		
 		FlatWallMultimesh.multimesh.set_instance_transform(g, pos)
 	
+	#Corners
 	CornerWallMultimesh.multimesh.instance_count = CornerWallMeshes.size()
 	var CornerShape = CornerWallMultimesh.multimesh.mesh.create_trimesh_shape()
 	CornerShape.backface_collision = true
 	for g in CornerWallMeshes.size():
 		var pos = CornerWallMeshes[g]
-		#var rot = Map.Instance.test(Vector2i(pos.origin.x, pos.origin.z) / 2)
 		
 		var collision = CollisionShape3D.new()
 		collision.shape = CornerShape
@@ -129,9 +99,8 @@ func BuildMaze(maze : Array[Array], SpawnP : Vector2):
 		
 		CornerWallMultimesh.multimesh.set_instance_transform(g, pos)
 	
+	#Dorr
 	DoorWallMultimesh.multimesh.instance_count = DoorWallMeshes.size()
-	
-	
 	for g in DoorWallMeshes.size():
 
 		var pos = DoorWallMeshes[g]

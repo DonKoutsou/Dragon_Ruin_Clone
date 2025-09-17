@@ -37,7 +37,7 @@ func generate_maze() -> void:
 	#for g in Doors:
 		#AllTiles.erase(g)
 	var rooms = separate_into_rooms(AllTiles)
-	var thing = 0
+	print("Room ammount : {0}".format([rooms.size()]))
 	
 func separate_into_rooms(tile_coords: Array) -> Array:
 	var rooms := []
@@ -85,34 +85,28 @@ func CantReach(tilecoords : Vector2, dir : Vector2) -> bool:
 	if (index == 0):
 		resault = false
 	else : if (index == 1):
-		resault = false
-	else : if (index == 2):
-		resault = false
-	else : if (index == 3):
-		resault = false
-	else : if (index == 4):
 		var rotatedv = Vector2.LEFT.rotated(tilerotation)
 		resault = dir.is_equal_approx(rotatedv)
-	else : if (index == 5):
+	else : if (index == 2):
 		var rot1 = Vector2.LEFT.rotated(tilerotation)
 		var rot2 = Vector2.DOWN.rotated(tilerotation)
 		resault = dir.is_equal_approx(rot1) or dir.is_equal_approx(rot2)
-	else : if (index == 6):
+	else : if (index == 3):
 		var rot1 = Vector2.LEFT.rotated(tilerotation)
 		resault = dir.is_equal_approx(rot1)
-	else : if (index == 7):
+	else : if (index == 4):
 		var rot1 = Vector2.DOWN.rotated(tilerotation)
 		resault = !dir.is_equal_approx(rot1)
-	else : if (index == 8):
+	else : if (index == 5):
 		var rot1 = Vector2.LEFT.rotated(tilerotation)
 		var rot2 = Vector2.RIGHT.rotated(tilerotation)
 		resault = dir.is_equal_approx(rot2) or dir.is_equal_approx(rot1)
-	else : if (index == 9):
+	else : if (index == 6):
 		resault = false
-	else : if (index == 10):
+	else : if (index == 7):
 		var rot1 = Vector2.UP.rotated(tilerotation)
 		resault = dir.is_equal_approx(rot1)
-	else : if (index == 11):
+	else : if (index == 8):
 		var rot1 = Vector2.LEFT.rotated(tilerotation)
 		var rot2 = Vector2.UP.rotated(tilerotation)
 		resault = dir.is_equal_approx(rot1) or dir.is_equal_approx(rot2)

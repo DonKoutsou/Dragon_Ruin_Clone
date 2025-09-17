@@ -18,6 +18,7 @@ signal PositionChanged(Pos : Vector3, Rot : float)
 func Teleport(Pos : Vector3) -> void:
 	PlayerPos = Pos
 	position = PlayerPos
+	PositionChanged.emit(PlayerPos, LookDir.y)
 
 func _input(event: InputEvent) -> void:
 	HandleRotation(event)
