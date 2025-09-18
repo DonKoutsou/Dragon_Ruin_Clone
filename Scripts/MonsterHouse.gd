@@ -6,7 +6,7 @@ class_name MonsterHouse
 @export var Spawns : Array[MonsterGroup]
 
 signal Atack(Instigator : Monster, Damage : int)
-signal MonsterKilled(Mon : Monster, ExpReward : int)
+signal MonsterKilled(Mon : Monster, ExpReward : int, GoldReward : int)
 signal HouseCleared
 
 func AddMonster(Mon : Monster) -> void:
@@ -23,7 +23,7 @@ func AddMonster(Mon : Monster) -> void:
 	
 	newgroup.Atacked.connect(GroupAtacks)
 	newgroup.GroupKilled.connect(GroupKilled.bind(newgroup))
-	newgroup.Killed.connect(MonKilled.bind(newgroup.Mon, newgroup.Mon.ExpReward))
+	newgroup.Killed.connect(MonKilled.bind(newgroup.Mon, newgroup.Mon.ExpReward, newgroup.Mon.GoldReward))
 
 func ProcessHouse(delta : float) -> void:
 	for g in Spawns:
@@ -32,8 +32,8 @@ func ProcessHouse(delta : float) -> void:
 func GroupAtacks(Instigator : Monster, Damage : int) -> void:
 	Atack.emit(Instigator, Damage)
 
-func MonKilled(Mon : Monster, ExpReward : int) -> void:
-	MonsterKilled.emit(Mon, ExpReward)
+func MonKilled(Mon : Monster, ExpReward : int, GoldReward : int) -> void:
+	MonsterKilled.emit(Mon, randf_range(ExpReward * 0.8, ExpReward * 1.2), randf_range(GoldReward * 0.8, GoldReward * 1.2))
 
 func GroupKilled(MonGroup : MonsterGroup) -> void:
 	Spawns.erase(MonGroup)

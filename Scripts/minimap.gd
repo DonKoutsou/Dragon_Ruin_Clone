@@ -4,6 +4,7 @@ class_name Minimap
 
 @export var TileM : TileMapLayer
 @export var LocationLabel : Label
+@export var GoldLabel : Label
 @export var PlayerSprite : Sprite2D
 @export var Camera : Camera2D
 
@@ -14,6 +15,9 @@ var maze : Array[Array]
 
 func _ready() -> void:
 	InitialSize = size
+
+func UpdateGold(NewAmm : int) -> void:
+	GoldLabel.text = "Gold\n{0}".format([NewAmm])
 
 func OnPositionVisited(Pos : Vector2, Direction : float) -> void:
 	Camera.position = Pos

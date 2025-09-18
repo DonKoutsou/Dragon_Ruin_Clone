@@ -16,7 +16,7 @@ var CurrentExp : int = 0
 var CurrentHP : int = 0
 
 func Init() -> void:
-	CurrentHP = GetStat(CharacterStat.STATS.HP)
+	CurrentHP = GetStat(CharacterStat.STATS.MAX_HP)
 
 func GiveExp(Amm : int) -> void:
 	CurrentExp += Amm
@@ -27,7 +27,7 @@ func GiveExp(Amm : int) -> void:
 
 func LevelUp() -> void:
 	CharacterLevel += 1
-	CurrentHP = GetStat(CharacterStat.STATS.HP)
+	CurrentHP = GetStat(CharacterStat.STATS.MAX_HP)
 	LevelChanged.emit()
 	MessageBox.RegisterEvent("{0} leveled up".format([CharacterName]))
 

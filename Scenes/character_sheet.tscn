@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://b63snluv13jfb"]
+[gd_scene load_steps=5 format=3 uid="uid://b63snluv13jfb"]
 
 [ext_resource type="Script" uid="uid://d20xk26tpbx3j" path="res://Scripts/character_sheet.gd" id="1_hrdcl"]
+[ext_resource type="Texture2D" uid="uid://dnyukhjlmoufi" path="res://Assets/icon.svg" id="2_fg8ep"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hrdcl"]
 bg_color = Color(0.529216, 0.16382661, 0.09128263, 1)
@@ -35,6 +36,13 @@ layout_mode = 2
 [node name="VBoxContainer" type="HBoxContainer" parent="VBoxContainer2"]
 layout_mode = 2
 
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+texture = ExtResource("2_fg8ep")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="HBoxContainer" type="VBoxContainer" parent="VBoxContainer2/VBoxContainer"]
 layout_mode = 2
 
@@ -66,6 +74,7 @@ fill_mode = 3
 show_percentage = false
 
 [node name="CharacterStats" type="Label" parent="VBoxContainer2"]
+visible = false
 layout_mode = 2
 text = "STR : 1
 INT : 1

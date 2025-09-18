@@ -11,7 +11,7 @@ func _ready() -> void:
 
 static func RegisterEvent(EventText : String) -> void:
 	Events.push_back(EventText)
-	if (Events.size() > 8):
+	if (Events.size() > 10):
 		Events.pop_front()
 	
 	var finaltext : String = ""

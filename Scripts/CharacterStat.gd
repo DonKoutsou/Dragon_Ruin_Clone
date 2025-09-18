@@ -8,7 +8,7 @@ class_name CharacterStat
 
 enum STATS
 {
-	HP,
+	MAX_HP,
 	AT,
 	DEF,
 	SPD,

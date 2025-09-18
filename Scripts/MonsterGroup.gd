@@ -21,7 +21,7 @@ func ProcessAtack(delta : float) -> void:
 		Atacked.emit(Mon, Mon.GetStat(CharacterStat.STATS.AT))
 		
 func Init() -> void:
-	CurrentHP = Mon.GetStat(CharacterStat.STATS.HP)
+	CurrentHP = Mon.GetStat(CharacterStat.STATS.MAX_HP)
 
 func Damage(Instigator : Character, Amm : int) -> void:
 	var finalDamage = max(0, Amm - Mon.GetStat(CharacterStat.STATS.DEF))
@@ -33,7 +33,7 @@ func Damage(Instigator : Character, Amm : int) -> void:
 	
 	if (CurrentHP <= 0):
 		Killed.emit()
-		CurrentHP = Mon.GetStat(CharacterStat.STATS.HP)
+		CurrentHP = Mon.GetStat(CharacterStat.STATS.MAX_HP)
 		Ammount -= 1
 		if (Ammount == 0):
 			GroupKilled.emit()

@@ -15,7 +15,7 @@ class_name Main
 @export var MiniMp : Minimap
 
 var AliveCharacters : Array[Character]
-
+var GoldAmmount : int = 0
 var MapData : Map
 var CurrentMosterHouse : MonsterHouse
 
@@ -41,6 +41,7 @@ func _ready() -> void:
 	Pl.PositionChanged.connect(PlayerPositionChanged)
 	
 	MiniMp.maze = MapData.maze
+	MiniMp.UpdateGold(GoldAmmount)
 
 func PlayerPositionChanged(PlayerPosition : Vector3, PlayerOrientation : float) -> void:
 	var pos = Vector2(roundi((PlayerPosition.x * 8) / 16), roundi((PlayerPosition.z * 8) / 16))
@@ -76,10 +77,13 @@ func _physics_process(delta: float) -> void:
 	for g in AliveCharacters:
 		g.ProcessAtack(delta)
 
-func MonsterKilled(Mon : Monster, ExpReward : int) -> void:
-	MessageBox.RegisterEvent("A {0} was killed. +{1} exp".format([Mon.MonsterName, ExpReward]))
+func MonsterKilled(Mon : Monster, ExpReward : int, GoldReward : int) -> void:
+	MessageBox.RegisterEvent("A {0} was killed. +{1} exp +{2} gold.".format([Mon.MonsterName, ExpReward, GoldReward]))
 	for g in AliveCharacters:
 		g.GiveExp(ExpReward)
+	
+	GoldAmmount += GoldReward
+	MiniMp.UpdateGold(GoldAmmount)
 	
 
 func CharacterKilled(Char : Character) -> void:

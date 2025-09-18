@@ -21,7 +21,7 @@ func SetCharacter(Char : Character) -> void:
 			stattext += "\n"
 	CharacterStatLabel.text = stattext
 	
-	CharacterHealthBar.max_value = Char.GetStat(CharacterStat.STATS.HP)
+	CharacterHealthBar.max_value = Char.GetStat(CharacterStat.STATS.MAX_HP)
 	CharacterHealthBar.value = Char.CurrentHP
 	
 	CharacterExpBar.max_value = Char.CharacterLevel * 100
