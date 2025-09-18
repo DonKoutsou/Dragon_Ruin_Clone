@@ -2,16 +2,21 @@
 
 [ext_resource type="Script" uid="uid://bs4q4gmw2d7ow" path="res://Scripts/pl.gd" id="1_v0iea"]
 
-[node name="Player" type="Node3D" node_paths=PackedStringArray("Cast")]
+[node name="Player" type="Node3D" node_paths=PackedStringArray("Cast", "CamPivot", "CamRotPivot")]
 script = ExtResource("1_v0iea")
 Cast = NodePath("RayCast3D")
+CamPivot = NodePath("CameraPivot")
+CamRotPivot = NodePath("CameraPivot/CameraRotationPivot")
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="CameraPivot" type="Node3D" parent="."]
+
+[node name="CameraRotationPivot" type="Node3D" parent="CameraPivot"]
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot/CameraRotationPivot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
 fov = 37.849285
 
-[node name="SpotLight3D" type="SpotLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+[node name="SpotLight3D" type="SpotLight3D" parent="CameraPivot/CameraRotationPivot/Camera3D"]
 light_energy = 10.0
 light_indirect_energy = 0.0
 light_bake_mode = 0

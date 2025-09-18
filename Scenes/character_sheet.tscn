@@ -1,0 +1,76 @@
+[gd_scene load_steps=4 format=3 uid="uid://b63snluv13jfb"]
+
+[ext_resource type="Script" uid="uid://d20xk26tpbx3j" path="res://Scripts/character_sheet.gd" id="1_hrdcl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hrdcl"]
+bg_color = Color(0.529216, 0.16382661, 0.09128263, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qwutc"]
+bg_color = Color(0.61366725, 0.61365867, 0.6136609, 1)
+
+[node name="CharacterSheet" type="PanelContainer" node_paths=PackedStringArray("CharacterNameLabel", "CharacterLevelLabel", "CharacterStatLabel", "CharacterHealthBar", "CharacterExpBar")]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 10
+script = ExtResource("1_hrdcl")
+CharacterNameLabel = NodePath("VBoxContainer2/VBoxContainer/HBoxContainer/CharacterName")
+CharacterLevelLabel = NodePath("VBoxContainer2/VBoxContainer/HBoxContainer/Label")
+CharacterStatLabel = NodePath("VBoxContainer2/CharacterStats")
+CharacterHealthBar = NodePath("VBoxContainer2/VBoxContainer/HealthBar")
+CharacterExpBar = NodePath("VBoxContainer2/VBoxContainer/ExpBar")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="HBoxContainer" parent="VBoxContainer2"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="VBoxContainer" parent="VBoxContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="CharacterName" type="Label" parent="VBoxContainer2/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "BRIAN"
+
+[node name="Label" type="Label" parent="VBoxContainer2/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Lvl1"
+
+[node name="HealthBar" type="ProgressBar" parent="VBoxContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(12, 0)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_styles/fill = SubResource("StyleBoxFlat_hrdcl")
+value = 31.38
+fill_mode = 3
+show_percentage = false
+
+[node name="ExpBar" type="ProgressBar" parent="VBoxContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(12, 0)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_styles/fill = SubResource("StyleBoxFlat_qwutc")
+value = 31.38
+fill_mode = 3
+show_percentage = false
+
+[node name="CharacterStats" type="Label" parent="VBoxContainer2"]
+layout_mode = 2
+text = "STR : 1
+INT : 1
+VIG : 1"
+horizontal_alignment = 1
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

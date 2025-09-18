@@ -2,42 +2,76 @@ extends Node2D
 
 class_name Map
 
-@export var TileM : TileMapLayer
-@export var TileM2 : TileMapLayer
+@export var TileMaps : Array[TileMapLayer]
+@export var Monsters : Array[Monster]
 
-var Visited : Array[Vector2]
+static var TileMapLayers : Array[TileMapLayer]
 
 var maze : Array[Array]
 var SpawnPoint : Vector2
-var MonsterHouses : Array[Array]
-
-static var Instance : Map
+var MonsterHouses : Array[MonsterHouse]
 
 func _ready() -> void:
-	Instance = self
+	TileMapLayers.clear()
+	for g in TileMaps:
+		TileMapLayers.append(g)
+		
 	generate_maze()
 
+func GetMonsterHouseForPosition(Pos : Vector2i) -> MonsterHouse:
+	var MonsterHouseOnPosition : MonsterHouse
+	for g in MonsterHouses:
+		if (g.Tiles.has(Pos)):
+			MonsterHouseOnPosition = g
+			break
+
+	return MonsterHouseOnPosition
+
 func generate_maze() -> void:
-	var rect = TileM.get_used_rect()
+	var rect = TileMapLayers[0].get_used_rect()
 	var size = rect.size + rect.position
 	for y in range(size.y):
 		var row : Array[int] = []
 		
 		for x in range(size.x):
-			var cell = TileM.get_cell_source_id(Vector2i(x, y))
-			# Let's say 1 = wall, 0 = open
-			if (TileM2.get_cell_source_id(Vector2i(x, y)) == 2):
+			var cell = GetIndexFromAtlasCoords(TileMapLayers[0].get_cell_atlas_coords(Vector2i(x, y)))
+			if (TileMapLayers[1].get_cell_source_id(Vector2i(x, y)) == 2):
 				SpawnPoint = Vector2(x, y)
 			row.append(cell)
 			
 		maze.append(row)
 		
-	var AllTiles = TileM.get_used_cells()
-	#var Doors = TileM.get_used_cells_by_id(6)
-	#for g in Doors:
-		#AllTiles.erase(g)
+	var AllTiles = TileMapLayers[0].get_used_cells()
+
 	var rooms = separate_into_rooms(AllTiles)
 	print("Room ammount : {0}".format([rooms.size()]))
+	for room in rooms:
+		var Spawns = GetMonsterSpawnsOnRoom(room)
+		if (Spawns.size() == 1):
+			var MHouse = MonsterHouse.new()
+			MHouse.Tiles = room
+			for g in 2:
+				var monster = Monsters.pick_random()
+				MHouse.AddMonster(monster)
+			MonsterHouses.append(MHouse)
+		else:
+			for spn in Spawns:
+				var spawnarea = flood_fill_ranged(spn, room, 5, {})
+				var MHouse = MonsterHouse.new()
+				MHouse.Tiles = spawnarea
+				for g in 2:
+					var monster = Monsters.pick_random()
+					MHouse.AddMonster(monster)
+				MonsterHouses.append(MHouse)
+				
+	print("Monster Houses ammount : {0}".format([MonsterHouses.size()]))
+	
+func GetMonsterSpawnsOnRoom(room : Array) -> Array[Vector2i]:
+	var Spawns : Array[Vector2i]
+	for g : Vector2i in TileMapLayers[1].get_used_cells_by_id(0):
+		if (room.has(g)):
+			Spawns.append(g)
+	return Spawns
 	
 func separate_into_rooms(tile_coords: Array) -> Array:
 	var rooms := []
@@ -46,13 +80,25 @@ func separate_into_rooms(tile_coords: Array) -> Array:
 	for coord in tile_coords:
 		if coord in visited:
 			continue
-		var room := []
-		flood_fill(coord, tile_coords, visited, room)
+		var room = flood_fill(coord, tile_coords, visited)
 		rooms.append(room)
 
 	return rooms
 
-func flood_fill(start: Vector2i, tile_coords: Array, visited: Dictionary, room: Array):
+func SeparateIntoCorridors(tile_coords: Array) -> Array:
+	var Corridors := []
+	var visited := {}
+
+	for coord in tile_coords:
+		if coord in visited:
+			continue
+		var room = flood_fill_ranged(coord, tile_coords, 5, visited)
+		Corridors.append(room)
+
+	return Corridors
+
+func flood_fill(start: Vector2i, tile_coords: Array, visited: Dictionary) -> Array:
+	var room : Array = []
 	var stack := [start]
 
 	while stack.size() > 0:
@@ -75,12 +121,39 @@ func flood_fill(start: Vector2i, tile_coords: Array, visited: Dictionary, room: 
 		for neighbor in neighbors:
 			if current + neighbor in tile_coords and neighbor + current not in visited and !CantReach(current, neighbor) and !CantReach(current + neighbor, neighbor * -1):
 				stack.push_back(neighbor + current)
-			else:
-				var f
+	
+	return room
 
+func flood_fill_ranged(start: Vector2i, tile_coords: Array, dist : float, visited: Dictionary) -> Array:
+	var room : Array = []
+	var stack := [start]
+
+	while stack.size() > 0:
+		var current = stack.pop_back()
+
+		if current in visited:
+			continue
+
+		visited[current] = true
+		room.append(current)
+
+		# Get neighboring tiles (4-directional)
+		var neighbors : Array[Vector2i] = [
+			Vector2i.LEFT,
+			Vector2i.RIGHT,
+			Vector2i.UP,
+			Vector2i.DOWN
+		]
+
+		for neighbor in neighbors:
+			if start.distance_to(current + neighbor) < dist and current + neighbor in tile_coords and neighbor + current not in visited and !CantReach(current, neighbor) and !CantReach(current + neighbor, neighbor * -1):
+				stack.push_back(neighbor + current)
+	
+	return room
+	
 func CantReach(tilecoords : Vector2, dir : Vector2) -> bool:
-	var index = TileM.get_cell_source_id(tilecoords)
-	var tilerotation = testrad(tilecoords)
+	var index = GetIndexFromAtlasCoords(TileMapLayers[0].get_cell_atlas_coords(tilecoords))
+	var tilerotation = GetTileRotationRadians(tilecoords)
 	var resault : bool
 	if (index == 0):
 		resault = false
@@ -112,9 +185,55 @@ func CantReach(tilecoords : Vector2, dir : Vector2) -> bool:
 		resault = dir.is_equal_approx(rot1) or dir.is_equal_approx(rot2)
 	return resault
 	
-func Testtile(pos : Vector2i) -> int:
+static func GetIndexFromAtlasCoords(Coords : Vector2) -> int:
+	var Index = 0
+	match(Coords):
+		Vector2(0,0):
+			Index = 0
+		Vector2(1,0):
+			Index = 1
+		Vector2(2,0):
+			Index = 2
+		Vector2(0,1):
+			Index = 3
+		Vector2(1,1):
+			Index = 4
+		Vector2(2,1):
+			Index = 5
+		Vector2(0,2):
+			Index = 6
+		Vector2(1,2):
+			Index = 7
+		Vector2(2,2):
+			Index = 8
+	return Index
+
+static func GetAtlasCoordsFromIndex(Index : int) -> Vector2:
+	var Coords = 0
+	match(Index):
+		0 :
+			Coords =Vector2(0,0)
+		1 :
+			Coords = Vector2(1,0)
+		2 :
+			Coords = Vector2(2,0)
+		3 :
+			Coords = Vector2(0,1)
+		4 :
+			Coords = Vector2(1,1)
+		5 :
+			Coords = Vector2(2,1)
+		6 :
+			Coords = Vector2(0,2)
+		7 :
+			Coords = Vector2(1,2)
+		8 :
+			Coords =Vector2(2,2)
+	return Coords
+
+static func Testtile(pos : Vector2i) -> int:
 	var tile_alternate : int = 0
-	var rot = test(pos)
+	var rot = GetTileRotationDegrees(pos)
 	match rot:
 		-90.0:
 			tile_alternate = TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_H
@@ -124,44 +243,26 @@ func Testtile(pos : Vector2i) -> int:
 			tile_alternate = TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_V
 	return tile_alternate
 
-func test(pos : Vector2i) -> float:
+static func GetTileRotationDegrees(pos : Vector2i) -> float:
 	var rot : float = 0
-	if TileM.is_cell_flipped_h(pos) == false and TileM.is_cell_flipped_v(pos) == false:
+	if TileMapLayers[0].is_cell_flipped_h(pos) == false and TileMapLayers[0].is_cell_flipped_v(pos) == false:
 		rot = 0
-	elif TileM.is_cell_flipped_h(pos) == true and TileM.is_cell_flipped_v(pos) == false:
+	elif TileMapLayers[0].is_cell_flipped_h(pos) == true and TileMapLayers[0].is_cell_flipped_v(pos) == false:
 		rot = -90
-	elif TileM.is_cell_flipped_h(pos) == false and TileM.is_cell_flipped_v(pos) == true:
+	elif TileMapLayers[0].is_cell_flipped_h(pos) == false and TileMapLayers[0].is_cell_flipped_v(pos) == true:
 		rot = 90
-	elif TileM.is_cell_flipped_h(pos) == true and TileM.is_cell_flipped_v(pos) == true:
+	elif TileMapLayers[0].is_cell_flipped_h(pos) == true and TileMapLayers[0].is_cell_flipped_v(pos) == true:
 		rot = 180
 	return rot
 
-func testrad(pos : Vector2i) -> float:
+static func GetTileRotationRadians(pos : Vector2i) -> float:
 	var rot : float = 0
-	if TileM.is_cell_flipped_h(pos) == false and TileM.is_cell_flipped_v(pos) == false:
+	if TileMapLayers[0].is_cell_flipped_h(pos) == false and TileMapLayers[0].is_cell_flipped_v(pos) == false:
 		rot = 0
-	elif TileM.is_cell_flipped_h(pos) == true and TileM.is_cell_flipped_v(pos) == false:
+	elif TileMapLayers[0].is_cell_flipped_h(pos) == true and TileMapLayers[0].is_cell_flipped_v(pos) == false:
 		rot = PI/2
-	elif TileM.is_cell_flipped_h(pos) == false and TileM.is_cell_flipped_v(pos) == true:
+	elif TileMapLayers[0].is_cell_flipped_h(pos) == false and TileMapLayers[0].is_cell_flipped_v(pos) == true:
 		rot = -PI/2
-	elif TileM.is_cell_flipped_h(pos) == true and TileM.is_cell_flipped_v(pos) == true:
+	elif TileMapLayers[0].is_cell_flipped_h(pos) == true and TileMapLayers[0].is_cell_flipped_v(pos) == true:
 		rot = PI
 	return rot
-	
-# Returns the rectangle (Rect2i) bounding all tiles on the given layer
-func get_tilemap_layer_bounds() -> Rect2i:
-	var cells := TileM.get_used_cells()
-	if cells.is_empty():
-		return Rect2i() # Or handle empty case specially
-	var min_x = INF
-	var min_y = INF
-	var max_x = -INF
-	var max_y = -INF
-	for cell in cells:
-		min_x = min(min_x, cell.x)
-		min_y = min(min_y, cell.y)
-		max_x = max(max_x, cell.x)
-		max_y = max(max_y, cell.y)
-	var size_x = max_x - min_x + 1
-	var size_y = max_y - min_y + 1
-	return Rect2i(Vector2i(min_x, min_y), Vector2i(size_x, size_y))

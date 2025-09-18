@@ -1,20 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://db3mah6gf2gqg"]
+[gd_scene load_steps=4 format=3 uid="uid://db3mah6gf2gqg"]
 
 [ext_resource type="Script" uid="uid://gv88tnay1gen" path="res://Scripts/minimap.gd" id="1_jahtd"]
 [ext_resource type="TileSet" uid="uid://ffar32u4k25w" path="res://Assets/Tileset.tres" id="1_ttd1e"]
 [ext_resource type="Texture2D" uid="uid://duriib55mixu7" path="res://Assets/Arrow.png" id="3_e31il"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h2yge"]
-bg_color = Color(0.17068, 0.17068, 0.17068, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_blend = true
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
 
 [node name="Control" type="PanelContainer" node_paths=PackedStringArray("TileM", "LocationLabel", "PlayerSprite", "Camera")]
 clip_contents = true
@@ -22,7 +10,6 @@ offset_right = 192.0
 offset_bottom = 110.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_h2yge")
 script = ExtResource("1_jahtd")
 TileM = NodePath("HBoxContainer/SubViewportContainer/SubViewport/TileMapLayer")
 LocationLabel = NodePath("HBoxContainer/VBoxContainer/Label")

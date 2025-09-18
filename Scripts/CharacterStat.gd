@@ -3,11 +3,13 @@ extends Resource
 class_name CharacterStat
 
 @export var StatName : STATS
+@export var StartingValue : int = 1
 @export var LevelMulti : int = 1
 
 enum STATS
 {
-	STR,
-	INT,
-	VIG,
+	HP,
+	AT,
+	DEF,
+	SPD,
 }

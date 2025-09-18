@@ -1,0 +1,57 @@
+[gd_scene load_steps=3 format=3 uid="uid://dsocgvbiy3j2s"]
+
+[ext_resource type="Script" uid="uid://c72bahtn3vgja" path="res://Scripts/monster_sheet.gd" id="1_bp7er"]
+[ext_resource type="Texture2D" uid="uid://dnyukhjlmoufi" path="res://Assets/icon.svg" id="2_ys4yt"]
+
+[node name="CharacterSheet" type="PanelContainer" node_paths=PackedStringArray("MonsterNameLabel", "MonsterAmountLabel", "MonsterStatLabel")]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+script = ExtResource("1_bp7er")
+MonsterNameLabel = NodePath("VBoxContainer2/HBoxContainer/MonsterName")
+MonsterAmountLabel = NodePath("VBoxContainer2/HBoxContainer/MonsterAmmount")
+MonsterStatLabel = NodePath("VBoxContainer2/CharacterStats")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2"]
+layout_mode = 2
+
+[node name="MonsterName" type="Label" parent="VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Slime"
+
+[node name="MonsterAmmount" type="Label" parent="VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "3"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer2"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+texture = ExtResource("2_ys4yt")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CharacterStats" type="Label" parent="VBoxContainer2"]
+visible = false
+layout_mode = 2
+text = "STR : 1
+INT : 1
+VIG : 1"
+horizontal_alignment = 1
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

@@ -1,26 +1,35 @@
-[gd_resource type="Resource" script_class="Character" load_steps=6 format=3 uid="uid://cjhavo113mib5"]
+[gd_resource type="Resource" script_class="Character" load_steps=7 format=3 uid="uid://cjhavo113mib5"]
 
 [ext_resource type="Script" uid="uid://bel483m12cmq1" path="res://Scripts/CharacterStat.gd" id="1_l7fwd"]
 [ext_resource type="Script" uid="uid://dwqnoamdvs5gm" path="res://Scripts/Character.gd" id="2_dbelt"]
 
 [sub_resource type="Resource" id="Resource_3qyhm"]
 script = ExtResource("1_l7fwd")
+StartingValue = 25
 LevelMulti = 2
 metadata/_custom_type_script = "uid://bel483m12cmq1"
 
 [sub_resource type="Resource" id="Resource_s0kal"]
 script = ExtResource("1_l7fwd")
 StatName = 1
-LevelMulti = 3
+StartingValue = 15
 metadata/_custom_type_script = "uid://bel483m12cmq1"
 
 [sub_resource type="Resource" id="Resource_llydp"]
 script = ExtResource("1_l7fwd")
 StatName = 2
+StartingValue = 10
+metadata/_custom_type_script = "uid://bel483m12cmq1"
+
+[sub_resource type="Resource" id="Resource_l7fwd"]
+script = ExtResource("1_l7fwd")
+StatName = 3
+StartingValue = 60
+LevelMulti = 2
 metadata/_custom_type_script = "uid://bel483m12cmq1"
 
 [resource]
 script = ExtResource("2_dbelt")
-CharacterName = "Brian"
-CharacterStats = Array[ExtResource("1_l7fwd")]([SubResource("Resource_3qyhm"), SubResource("Resource_s0kal"), SubResource("Resource_llydp")])
+CharacterName = "Jim"
+CharacterStats = Array[ExtResource("1_l7fwd")]([SubResource("Resource_3qyhm"), SubResource("Resource_s0kal"), SubResource("Resource_llydp"), SubResource("Resource_l7fwd")])
 metadata/_custom_type_script = "uid://dwqnoamdvs5gm"

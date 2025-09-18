@@ -15,30 +15,27 @@ var maze : Array[Array]
 func _ready() -> void:
 	InitialSize = size
 
-func OnPositionVisited(Pos : Vector3, Direction : float) -> void:
-	var pos = Vector2(roundi((Pos.x * 8) / 16), roundi((Pos.z * 8) / 16))
-	var final = Vector2(pos.x * 16, pos.y * 16) + Vector2(8,8)
-
-	Camera.position = final
+func OnPositionVisited(Pos : Vector2, Direction : float) -> void:
+	Camera.position = Pos
 	PlayerSprite.rotation = -Direction
 	#var row = -16
 	#for g in 3:
 		#var collumn = -16
 		#for z in 3:
-	var mappos = TileM.local_to_map(Vector2(final.x, final.y ))
+	var mappos = TileM.local_to_map(Pos)
 	#collumn += 16
 	
 	if (maze.size() - 1 < mappos.y or maze[mappos.y].size() - 1 < mappos.x):
 		return
 	var t = maze[mappos.y][mappos.x]
-	TileM.set_cell(mappos, t, Vector2i.ZERO, Map.Instance.Testtile(mappos))
+	TileM.set_cell(mappos, 10, Map.GetAtlasCoordsFromIndex(t), Map.Testtile(mappos))
 	#print("Cell {0}x {1}y set to {2}".format([mappos.y, mappos.x, t]))
 			
 		
 		#row += 16
 		#collumn = -16
 		
-	var p = TileM.local_to_map(Vector2(final.x, final.y))
+	var p = TileM.local_to_map(Pos)
 	LocationLabel.text = "{0}\n{1}".format([AngleToDirection(Direction),p])
 
 static func AngleToDirection(angle: float) -> String:

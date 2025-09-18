@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="Monster" load_steps=7 format=3 uid="uid://ddhgqnn2gqmv4"]
+
+[ext_resource type="Script" uid="uid://nrr1x4b7ijdb" path="res://Scripts/Monster.gd" id="1_so0cd"]
+[ext_resource type="Script" uid="uid://bel483m12cmq1" path="res://Scripts/CharacterStat.gd" id="1_t6qoy"]
+
+[sub_resource type="Resource" id="Resource_t6qoy"]
+script = ExtResource("1_t6qoy")
+StartingValue = 40
+metadata/_custom_type_script = "uid://bel483m12cmq1"
+
+[sub_resource type="Resource" id="Resource_sv068"]
+script = ExtResource("1_t6qoy")
+StatName = 1
+StartingValue = 24
+metadata/_custom_type_script = "uid://bel483m12cmq1"
+
+[sub_resource type="Resource" id="Resource_epk5n"]
+script = ExtResource("1_t6qoy")
+StatName = 2
+StartingValue = 4
+metadata/_custom_type_script = "uid://bel483m12cmq1"
+
+[sub_resource type="Resource" id="Resource_gtfcb"]
+script = ExtResource("1_t6qoy")
+StatName = 3
+StartingValue = 60
+metadata/_custom_type_script = "uid://bel483m12cmq1"
+
+[resource]
+script = ExtResource("1_so0cd")
+MonsterName = "Slime"
+MonsterStats = Array[ExtResource("1_t6qoy")]([SubResource("Resource_t6qoy"), SubResource("Resource_sv068"), SubResource("Resource_epk5n"), SubResource("Resource_gtfcb")])
+ExpReward = 60
+metadata/_custom_type_script = "uid://nrr1x4b7ijdb"

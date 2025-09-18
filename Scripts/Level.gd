@@ -35,7 +35,7 @@ func BuildMaze(maze : Array[Array], SpawnP : Vector2):
 	for y in range(maze.size()):
 		for x in range(maze[y].size()):
 			var pos = Vector3(x * 2, 0, y * 2)
-			var rot = Map.Instance.test(Vector2i(pos.x, pos.z) / 2)
+			var rot = Map.GetTileRotationDegrees(Vector2i(pos.x, pos.z) / 2)
 			#Floor
 			FloorMeshes.append(Transform3D(Basis(), pos))
 			#Ceiling
@@ -49,7 +49,7 @@ func BuildMaze(maze : Array[Array], SpawnP : Vector2):
 				CornerWallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot)), pos + Vector3(0,1,0)))
 			#Door
 			else : if (maze[y][x] == 3):
-				DoorWallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(Map.Instance.test(Vector2i(pos.x, pos.z) / 2))), pos + Vector3(0,1,0)))
+				DoorWallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(Map.GetTileRotationDegrees(Vector2i(pos.x, pos.z) / 2))), pos + Vector3(0,1,0)))
 			#Cap
 			else : if (maze[y][x] == 4):
 				WallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot)), pos + Vector3(0,1,0)))

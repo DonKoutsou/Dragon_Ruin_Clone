@@ -1,0 +1,8 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://oj2ng820qo1"]
+
+[ext_resource type="StyleBox" uid="uid://d3ufor3tl3pl4" path="res://Theme/Panel.tres" id="1_2ufmn"]
+[ext_resource type="FontFile" uid="uid://cx7h55l37eu8p" path="res://Fonts/Monocraft.ttf" id="1_io6mi"]
+
+[resource]
+Label/fonts/font = ExtResource("1_io6mi")
+PanelContainer/styles/panel = ExtResource("1_2ufmn")

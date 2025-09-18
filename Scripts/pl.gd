@@ -7,6 +7,8 @@ static var PlayerPos : Vector3
 
 @export var speed = 4.0
 @export var Cast : RayCast3D
+@export var CamPivot : Node3D
+@export var CamRotPivot : Node3D
 
 var LookDir : Vector3
 
@@ -37,20 +39,19 @@ func HandleRotation(event: InputEvent) -> void:
 		
 	if (Rot == Vector3.ZERO):
 		return
+		
 	LookDir += Rot
 	
 	if (is_instance_valid(RotTween)):
 		RotTween.kill()
 	RotTween = create_tween()
-	RotTween.tween_property(self, "rotation", LookDir, 0.3)
+	RotTween.tween_property(CamRotPivot, "rotation", LookDir, 0.3)
 	
 	PositionChanged.emit(PlayerPos, LookDir.y)
 
 func HandleWalk(event: InputEvent) -> void:
-	if (is_instance_valid(MoveTween) and MoveTween.is_running()):
-		return
-		
 	var dir = Vector3.ZERO
+	
 	if event.is_action_pressed("move_forward"):
 		dir.z -= 1
 	if event.is_action_pressed("move_back"):
@@ -63,17 +64,24 @@ func HandleWalk(event: InputEvent) -> void:
 	if (dir == Vector3.ZERO):
 		return
 	
-	Cast.target_position = dir * 2
-	
 	dir = dir.normalized().rotated(Vector3(0,1,0), LookDir.y)
 	
+	Cast.target_position = dir * 2
 	
 	Cast.force_raycast_update()
 	if (Cast.is_colliding()):
 		return
 	PlayerPos += (dir * 2)
 	
+	if (is_instance_valid(MoveTween)):
+		MoveTween.kill()
+	
 	MoveTween = create_tween()
-	MoveTween.tween_property(self, "position", PlayerPos, 0.3)
+	MoveTween.tween_method(TweenCam.bind(CamPivot.global_position, PlayerPos), 0.0, 1.0, 0.3)
+	#MoveTween.tween_property(CamPivot, "global_position", PlayerPos, 0.3)
+	position = PlayerPos
 	
 	PositionChanged.emit(PlayerPos, LookDir.y)
+
+func TweenCam(Alpha : float, OriginalPosition : Vector3, FinalPos : Vector3) -> void:
+	CamPivot.global_position = OriginalPosition.lerp(FinalPos, Alpha)
