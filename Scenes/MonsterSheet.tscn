@@ -1,9 +1,27 @@
-[gd_scene load_steps=3 format=3 uid="uid://dsocgvbiy3j2s"]
+[gd_scene load_steps=5 format=3 uid="uid://dsocgvbiy3j2s"]
 
 [ext_resource type="Script" uid="uid://c72bahtn3vgja" path="res://Scripts/monster_sheet.gd" id="1_bp7er"]
 [ext_resource type="Texture2D" uid="uid://dnyukhjlmoufi" path="res://Assets/icon.svg" id="2_ys4yt"]
 
-[node name="CharacterSheet" type="PanelContainer" node_paths=PackedStringArray("MonsterNameLabel", "MonsterAmountLabel", "MonsterStatLabel")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5k3fm"]
+draw_center = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b766n"]
+content_margin_left = 1.0
+content_margin_top = 1.0
+content_margin_right = 1.0
+content_margin_bottom = 1.0
+bg_color = Color(0.3655901, 0.36559013, 0.36558995, 1)
+border_blend = true
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+corner_detail = 4
+shadow_color = Color(0.09320182, 0.09320182, 0.09320182, 0.5)
+shadow_size = 2
+
+[node name="CharacterSheet" type="PanelContainer" node_paths=PackedStringArray("MonsterNameLabel", "MonsterAmountLabel", "MonsterStatLabel", "AtackBar")]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -21,6 +39,15 @@ script = ExtResource("1_bp7er")
 MonsterNameLabel = NodePath("VBoxContainer2/HBoxContainer/MonsterName")
 MonsterAmountLabel = NodePath("VBoxContainer2/HBoxContainer/MonsterAmmount")
 MonsterStatLabel = NodePath("VBoxContainer2/CharacterStats")
+AtackBar = NodePath("ProgressBar")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_5k3fm")
+theme_override_styles/fill = SubResource("StyleBoxFlat_b766n")
+max_value = 1.0
+show_percentage = false
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="."]
 layout_mode = 2

@@ -72,6 +72,7 @@ func HandleWalk(event: InputEvent) -> void:
 	if (Cast.is_colliding()):
 		return
 	PlayerPos += (dir * 2)
+	PlayerPos = PlayerPos.round()
 	
 	if (is_instance_valid(MoveTween)):
 		MoveTween.kill()
@@ -82,6 +83,8 @@ func HandleWalk(event: InputEvent) -> void:
 	position = PlayerPos
 	
 	PositionChanged.emit(PlayerPos, LookDir.y)
+	
+	AudioManager.Instance.PlaySound(AudioManager.Sound.STEP, -5, 0.2)
 
 func TweenCam(Alpha : float, OriginalPosition : Vector3, FinalPos : Vector3) -> void:
 	CamPivot.global_position = OriginalPosition.lerp(FinalPos, Alpha)

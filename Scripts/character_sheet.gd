@@ -7,6 +7,7 @@ class_name CharacterSheet
 @export var CharacterStatLabel : Label
 @export var CharacterHealthBar : ProgressBar
 @export var CharacterExpBar : ProgressBar
+@export var AtackBar : ProgressBar
 
 
 func SetCharacter(Char : Character) -> void:
@@ -32,6 +33,10 @@ func SetCharacter(Char : Character) -> void:
 	Char.Damaged.connect(Damaged.bind(Char))
 	Char.Killed.connect(CharacterKilled)
 	Char.Atacked.connect(Atacked)
+	Char.AtackProcessed.connect(AtackProcessed)
+
+func AtackProcessed(TimeLeft : float) -> void:
+	AtackBar.value = TimeLeft
 
 func CharacterKilled() -> void:
 	queue_free()
@@ -42,6 +47,18 @@ func Damaged(Amm : int, Char : Character) -> void:
 	add_child(f)
 	f.SetColor(false)
 	StatsUpdated(Char)
+	
+	var tw = create_tween()
+	tw.set_ease(Tween.EASE_OUT)
+	tw.set_trans(Tween.TRANS_BACK)
+	tw.tween_property(self, "modulate", Color(1.0, 0.539, 0.475, 1.0), 0.15)
+	await tw.finished
+	var tw2 = create_tween()
+	tw2.set_ease(Tween.EASE_OUT)
+	tw2.set_trans(Tween.TRANS_BACK)
+	tw2.tween_property(self, "modulate", Color(1,1,1), 0.15)
+	
+	AudioManager.Instance.PlaySound(AudioManager.Sound.DAMAGE, -5, 0.2)
 
 func Atacked(_Damage : int) -> void:
 	var tw = create_tween()
@@ -58,6 +75,7 @@ func LevelGained() -> void:
 	var f = Floater.new()
 	f.text = "Level Up"
 	add_child(f)
+	AudioManager.Instance.PlaySound(AudioManager.Sound.LEVELUP, -5)
 
 func StatsUpdated(Char : Character) -> void:
 	CharacterLevelLabel.text = "Lvl : {0}".format([Char.CharacterLevel])

@@ -11,6 +11,7 @@ signal LevelChanged
 signal ExpGained
 signal Damaged(Amm : int)
 signal Killed
+signal AtackProcessed(TimeLeft : float)
 
 var CurrentExp : int = 0
 var CurrentHP : int = 0
@@ -50,6 +51,7 @@ var AtackCooldown : float = 1
 
 func ProcessAtack(delta : float) -> void:
 	AtackCooldown -= GetStat(CharacterStat.STATS.SPD) / 100.0 * delta
+	AtackProcessed.emit(AtackCooldown)
 	if (AtackCooldown <= 0):
 		AtackCooldown = 1
 		Atacked.emit(GetStat(CharacterStat.STATS.AT))

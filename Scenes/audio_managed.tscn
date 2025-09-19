@@ -1,0 +1,14 @@
+[gd_scene load_steps=5 format=3 uid="uid://cd6x3o3cq6nje"]
+
+[ext_resource type="Script" uid="uid://dpmdj7wjn35dy" path="res://Scenes/audio_managed.gd" id="1_slgmx"]
+[ext_resource type="AudioStream" uid="uid://dyxq451c4e5r6" path="res://Assets/Sounds/FootStep.mp3" id="2_qc00v"]
+[ext_resource type="AudioStream" uid="uid://b2vi5bt4lhaqb" path="res://Assets/Sounds/LevelUp.mp3" id="3_mdty1"]
+[ext_resource type="AudioStream" uid="uid://3kc76q2fdtq0" path="res://Assets/Sounds/Damage.mp3" id="4_1gw26"]
+
+[node name="AudioManaged" type="Node"]
+script = ExtResource("1_slgmx")
+SoundLibrary = Dictionary[int, AudioStream]({
+0: ExtResource("2_qc00v"),
+1: ExtResource("3_mdty1"),
+2: ExtResource("4_1gw26")
+})

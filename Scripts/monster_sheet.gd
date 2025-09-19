@@ -5,6 +5,7 @@ class_name MonsterSheet
 @export var MonsterNameLabel : Label
 @export var MonsterAmountLabel : Label
 @export var MonsterStatLabel : Label
+@export var AtackBar : ProgressBar
 
 var MonsterAmm : int
 
@@ -17,6 +18,7 @@ func AddMonsters(MonGroup : MonsterGroup) -> void:
 	MonGroup.Damaged.connect(MonsterDamaged)
 	MonGroup.Killed.connect(MonsterKilled)
 	MonGroup.Atacked.connect(MonsterAtacked)
+	MonGroup.AtackProcessed.connect(AtackProcessed)
 	
 	var stattext : String = ""
 	for g in CharacterStat.STATS.values():
@@ -24,7 +26,9 @@ func AddMonsters(MonGroup : MonsterGroup) -> void:
 		if (g < CharacterStat.STATS.keys().size() - 1):
 			stattext += "\n"
 	MonsterStatLabel.text = stattext
-
+	
+func AtackProcessed(TimeLeft : float) -> void:
+	AtackBar.value = TimeLeft
 
 func MonsterDamaged(Amm : int) -> void:
 	var f = Floater.new()
@@ -32,6 +36,17 @@ func MonsterDamaged(Amm : int) -> void:
 	add_child(f)
 	f.SetColor(false)
 	
+	var tw = create_tween()
+	tw.set_ease(Tween.EASE_OUT)
+	tw.set_trans(Tween.TRANS_BACK)
+	tw.tween_property(self, "modulate", Color(1.0, 0.539, 0.475, 1.0), 0.15)
+	await tw.finished
+	var tw2 = create_tween()
+	tw2.set_ease(Tween.EASE_OUT)
+	tw2.set_trans(Tween.TRANS_BACK)
+	tw2.tween_property(self, "modulate", Color(1,1,1), 0.15)
+	
+	AudioManager.Instance.PlaySound(AudioManager.Sound.DAMAGE, -5, 0.2)
 	
 func MonsterKilled() -> void:
 	MonsterAmm -= 1

@@ -44,13 +44,16 @@ func _ready() -> void:
 	MiniMp.UpdateGold(GoldAmmount)
 
 func PlayerPositionChanged(PlayerPosition : Vector3, PlayerOrientation : float) -> void:
+	@warning_ignore("narrowing_conversion")
+	var Pos = Vector2i(PlayerPosition.x, PlayerPosition.z) / 2
+	print("Player moved to location : {0}".format([Pos]))
+	
 	var pos = Vector2(roundi((PlayerPosition.x * 8) / 16), roundi((PlayerPosition.z * 8) / 16))
 	var final = Vector2(pos.x * 16, pos.y * 16) + Vector2(8,8)
 	
 	MiniMp.OnPositionVisited(final, PlayerOrientation)
 	
-	@warning_ignore("narrowing_conversion")
-	var MHouse = MapData.GetMonsterHouseForPosition(Vector2i(PlayerPosition.x, PlayerPosition.z) / 2)
+	var MHouse = MapData.GetMonsterHouseForPosition(Pos)
 	
 	if (MHouse != CurrentMosterHouse):
 		if (CurrentMosterHouse != null):

@@ -9,6 +9,7 @@ signal Atacked(Instigator : Monster, Damage : int)
 signal Damaged(Amm : int)
 signal Killed
 signal GroupKilled
+signal AtackProcessed(TimeLeft : float)
 
 var CurrentHP : int = 0
 
@@ -16,6 +17,7 @@ var AtackCooldown : float = 1
 
 func ProcessAtack(delta : float) -> void:
 	AtackCooldown -= Mon.GetStat(CharacterStat.STATS.SPD) / 100.0 * delta
+	AtackProcessed.emit(AtackCooldown)
 	if (AtackCooldown <= 0):
 		AtackCooldown = 1
 		Atacked.emit(Mon, Mon.GetStat(CharacterStat.STATS.AT))

@@ -183,10 +183,25 @@ func CantReach(tilecoords : Vector2, dir : Vector2) -> bool:
 		var rot1 = Vector2.LEFT.rotated(tilerotation)
 		var rot2 = Vector2.UP.rotated(tilerotation)
 		resault = dir.is_equal_approx(rot1) or dir.is_equal_approx(rot2)
+	else : if (index == 9):
+		var rot1 = Vector2.RIGHT.rotated(tilerotation)
+		resault = !dir.is_equal_approx(rot1)
+	else : if (index == 10):
+		var rot1 = Vector2.LEFT.rotated(tilerotation)
+		var rot2 = Vector2.DOWN.rotated(tilerotation)
+		resault = dir.is_equal_approx(rot1) or dir.is_equal_approx(rot2)
+	else : if (index == 11):
+		var rot1 = Vector2.LEFT.rotated(tilerotation)
+		var rot2 = Vector2.UP.rotated(tilerotation)
+		resault = dir.is_equal_approx(rot1) or dir.is_equal_approx(rot2)
+	else : if (index == 12):
+		var rot1 = Vector2.LEFT.rotated(tilerotation)
+		var rot2 = Vector2.RIGHT.rotated(tilerotation)
+		resault = dir.is_equal_approx(rot1) or dir.is_equal_approx(rot2)
 	return resault
 	
 static func GetIndexFromAtlasCoords(Coords : Vector2) -> int:
-	var Index = 0
+	var Index = -1
 	match(Coords):
 		Vector2(0,0):
 			Index = 0
@@ -206,10 +221,18 @@ static func GetIndexFromAtlasCoords(Coords : Vector2) -> int:
 			Index = 7
 		Vector2(2,2):
 			Index = 8
+		Vector2(0,3):
+			Index = 9
+		Vector2(1,3):
+			Index = 10
+		Vector2(2,3):
+			Index = 11
+		Vector2(0,4):
+			Index = 12
 	return Index
 
 static func GetAtlasCoordsFromIndex(Index : int) -> Vector2:
-	var Coords = 0
+	var Coords = Vector2(0,0)
 	match(Index):
 		0 :
 			Coords =Vector2(0,0)
@@ -229,6 +252,14 @@ static func GetAtlasCoordsFromIndex(Index : int) -> Vector2:
 			Coords = Vector2(1,2)
 		8 :
 			Coords =Vector2(2,2)
+		9 :
+			Coords =Vector2(0,3)
+		10 :
+			Coords =Vector2(1,3)
+		11 :
+			Coords =Vector2(2,3)
+		12 :
+			Coords =Vector2(0,4)
 	return Coords
 
 static func Testtile(pos : Vector2i) -> int:

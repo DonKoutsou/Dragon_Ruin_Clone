@@ -5,7 +5,6 @@
 [ext_resource type="Texture2D" uid="uid://duriib55mixu7" path="res://Assets/Arrow.png" id="3_e31il"]
 
 [node name="Control" type="PanelContainer" node_paths=PackedStringArray("TileM", "LocationLabel", "GoldLabel", "PlayerSprite", "Camera")]
-clip_contents = true
 offset_right = 192.0
 offset_bottom = 110.0
 size_flags_horizontal = 3

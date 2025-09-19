@@ -50,14 +50,20 @@ static func AngleToDirection(angle: float) -> String:
 func _input(event: InputEvent) -> void:
 	if (event.is_action_pressed("Map")):
 		if (MapBig):
-			#set_anchors_preset(Control.PRESET_FULL_RECT)
-			size = get_viewport_rect().size
-			MapBig = false
-			$HBoxContainer/VBoxContainer.visible = false
-			Camera.zoom = Vector2(0.5,0.5)
-		else:
 			set_anchors_preset(Control.PRESET_TOP_LEFT)
 			size = InitialSize
-			MapBig = true
+			MapBig = false
 			$HBoxContainer/VBoxContainer.visible = true
 			Camera.zoom = Vector2(1,1)
+		else:
+			#set_anchors_preset(Control.PRESET_FULL_RECT)
+			size = get_viewport_rect().size
+			MapBig = true
+			$HBoxContainer/VBoxContainer.visible = false
+			Camera.zoom = Vector2(0.5,0.5)
+			
+	if (MapBig):
+		if (event.is_action_pressed("zoom_in")):
+			Camera.zoom = clamp(Camera.zoom + Vector2(0.1,0.1), Vector2(0.2,0.2), Vector2(4,4))
+		if (event.is_action_pressed("zoom_out")):
+			Camera.zoom = clamp(Camera.zoom - Vector2(0.1,0.1), Vector2(0.2,0.2), Vector2(4,4))

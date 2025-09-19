@@ -34,6 +34,8 @@ func BuildMaze(maze : Array[Array], SpawnP : Vector2):
 	
 	for y in range(maze.size()):
 		for x in range(maze[y].size()):
+			if (maze[y][x] == -1):
+				continue
 			var pos = Vector3(x * 2, 0, y * 2)
 			var rot = Map.GetTileRotationDegrees(Vector2i(pos.x, pos.z) / 2)
 			#Floor
@@ -49,7 +51,7 @@ func BuildMaze(maze : Array[Array], SpawnP : Vector2):
 				CornerWallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot)), pos + Vector3(0,1,0)))
 			#Door
 			else : if (maze[y][x] == 3):
-				DoorWallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(Map.GetTileRotationDegrees(Vector2i(pos.x, pos.z) / 2))), pos + Vector3(0,1,0)))
+				DoorWallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot)), pos + Vector3(0,1,0)))
 			#Cap
 			else : if (maze[y][x] == 4):
 				WallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot)), pos + Vector3(0,1,0)))
@@ -65,6 +67,19 @@ func BuildMaze(maze : Array[Array], SpawnP : Vector2):
 			#Corner
 			else : if (maze[y][x] == 8):
 				CornerWallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot - 90)), pos + Vector3(0,1,0)))
+			else : if (maze[y][x] == 9):
+				DoorWallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot)), pos + Vector3(0,1,0)))
+				WallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot - 90)), pos + Vector3(0,1,0)))
+				WallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot + 90)), pos + Vector3(0,1,0)))
+			else : if (maze[y][x] == 10):
+				DoorWallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot)), pos + Vector3(0,1,0)))
+				WallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot + 90)), pos + Vector3(0,1,0)))
+			else : if (maze[y][x] == 11):
+				DoorWallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot)), pos + Vector3(0,1,0)))
+				WallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot - 90)), pos + Vector3(0,1,0)))
+			else : if (maze[y][x] == 12):
+				DoorWallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot)), pos + Vector3(0,1,0)))
+				DoorWallMeshes.append(Transform3D(Basis().rotated(Vector3(0,1,0), deg_to_rad(rot + 180)), pos + Vector3(0,1,0)))
 				
 	#Floors
 	FloorMultiMesh.multimesh.instance_count = FloorMeshes.size()

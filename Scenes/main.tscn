@@ -80,8 +80,10 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
+[node name="MessageBox" parent="CanvasLayer/SubViewportContainer/SubViewport" instance=ExtResource("13_fdnlq")]
+offset_left = -250.0
+offset_bottom = 166.0
+
 [node name="Minimap" parent="CanvasLayer/SubViewportContainer/SubViewport" instance=ExtResource("2_0xm2m")]
 offset_right = 242.0
 offset_bottom = 158.0
-
-[node name="MessageBox" parent="CanvasLayer/SubViewportContainer/SubViewport" instance=ExtResource("13_fdnlq")]
